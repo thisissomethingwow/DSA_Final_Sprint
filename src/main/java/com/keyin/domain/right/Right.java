@@ -14,10 +14,10 @@ public class Right {
     private int value;
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Left left;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Right right;
 
     public int getValue() {

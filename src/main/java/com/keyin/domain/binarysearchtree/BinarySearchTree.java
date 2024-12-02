@@ -2,22 +2,21 @@ package com.keyin.domain.binarysearchtree;
 
 import com.keyin.domain.left.Left;
 import com.keyin.domain.right.Right;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
 
 @Entity
 public class BinarySearchTree {
     @Id
-    @SequenceGenerator(name = "member_sequence", sequenceName = "member_sequence", allocationSize = 1, initialValue=1)
-    @GeneratedValue(generator = "member_sequence")
+    @SequenceGenerator(name = "BinarySearchTree_sequence", sequenceName = "BinarySearchTree_sequence", allocationSize = 1, initialValue=1)
+    @GeneratedValue(generator = "BinarySearchTree_sequence")
     private long id;
 
     private int root;
 
+    @OneToOne(cascade = CascadeType.ALL)
     private Left left;
 
+    @OneToOne(cascade = CascadeType.ALL)
     private Right right;
 
     public long getId() {

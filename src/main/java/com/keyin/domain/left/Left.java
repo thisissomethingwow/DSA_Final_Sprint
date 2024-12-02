@@ -1,18 +1,23 @@
 package com.keyin.domain.left;
 
 import com.keyin.domain.right.Right;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "left_table")
 public class Left {
+
+    @Id
+    @SequenceGenerator(name = "Left_sequence", sequenceName = "Left_sequence", allocationSize = 1, initialValue=1)
+    @GeneratedValue(generator = "Left_sequence")
+    private long id;
 
     private int value;
 
+    @OneToOne(cascade = CascadeType.ALL)
     private Left left;
 
+    @OneToOne(cascade = CascadeType.ALL)
     private Right right;
 
     public int getValue() {
@@ -39,10 +44,25 @@ public class Left {
         this.right = right;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public Left() {
     }
 
     public Left(int value, Left left, Right right) {
+        this.value = value;
+        this.left = left;
+        this.right = right;
+    }
+
+    public Left(long id, int value, Left left, Right right) {
+        this.id = id;
         this.value = value;
         this.left = left;
         this.right = right;

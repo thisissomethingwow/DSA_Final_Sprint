@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>index</title>
+</head>
+<body>
+<h1>test</h1>
+<!--nums for tree staring from root then left then right:-->
+<!--<input type="text">-->
+root,rootLeft,rootRight
+<form id="treeForm">
+    <input type="text" id="tree">
+<button onclick="handleSubmitTree">submit</button>
+</form>
+<br>
+<br>
+<script>
+
+    const handelSubmitTree = async ()=>{
+        const treeData = document.getElementById("tree").value;
+        console.log(treeData)
+    //     try{
+    //         const res  = await fetch("http://localhost:8080/tree",{
+    //             method:"POST",
+    //             headers:{'Content-Type': 'application/json'},
+    //         })
+    //     }catch (error) {
+    //   console.error('error when adding tree', error)
+    //   throw error
+    //     }
+    }
+
+</script>
+</body>
+</html>

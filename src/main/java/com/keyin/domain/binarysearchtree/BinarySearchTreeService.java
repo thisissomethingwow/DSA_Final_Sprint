@@ -17,4 +17,7 @@ public class BinarySearchTreeService {
     public BinarySearchTree addTree(BinarySearchTree binarySearchTree){
         return binarySearchTreeRepository.save(binarySearchTree);
     }
+
+
+
 }

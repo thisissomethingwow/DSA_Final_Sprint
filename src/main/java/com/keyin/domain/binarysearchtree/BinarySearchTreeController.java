@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
 @RestController
-@RequestMapping("/tree") // this is here for the sake of testing can remove when working
+    //@RequestMapping("/tree") // this is here for the sake of testing can remove when working
 @CrossOrigin
-
 public class BinarySearchTreeController {
     @Autowired
     private BinarySearchTreeService binarySearchTreeService;
@@ -27,16 +27,21 @@ public class BinarySearchTreeController {
         return binarySearchTreeService.addTree(binarySearchTree);
     }
 
-    @GetMapping("/enter_numbers")
-    public String showInput() {
-        return "index";
+
+    @PostMapping("/process-numbers")
+    public BinarySearchTree processNumber(@RequestBody String stringNumbers){
+        List<Integer> numbersInt = Arrays.stream(stringNumbers.replace("\"","").split(",")).map(String::trim).map(Integer::parseInt).toList();
+        BinarySearchTree root =null;
+        for (int number:numbersInt) {
+            root= binarySearchTreeService.insertValue(root,number);
+        }
+        return binarySearchTreeService.addTree(root);
     }
 
-//    @PostMapping("/process-numbers")
-//    public String processNumber(){
-////        ArrayList<Integer> numberArray = binaryTreeSetUp.sortNumber();
-////       String jsonNumber = binaryTreeSetUp.json(numberArray);
-//
-//    }
+
+    @GetMapping("/previous-trees")
+    public List<BinarySearchTree> getPreviousTrees(){
+        return binarySearchTreeService.getAllTree();
+    }
 
 }

@@ -1,35 +1,114 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>index</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Search Tree Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        #result, #previous-trees {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
 </head>
 <body>
-<h1>test</h1>
-<!--nums for tree staring from root then left then right:-->
-<!--<input type="text">-->
-root,rootLeft,rootRight
-<form id="treeForm">
-    <input type="text" id="tree">
-<button onclick="handleSubmitTree">submit</button>
-</form>
-<br>
-<br>
-<script>
+<h1>Binary Search Tree Application</h1>
 
-    const handelSubmitTree = async ()=>{
-        const treeData = document.getElementById("tree").value;
-        console.log(treeData)
-    //     try{
-    //         const res  = await fetch("http://localhost:8080/tree",{
-    //             method:"POST",
-    //             headers:{'Content-Type': 'application/json'},
-    //         })
-    //     }catch (error) {
-    //   console.error('error when adding tree', error)
-    //   throw error
-    //     }
+<form id="bst-form">
+    <label for="numbers">Enter numbers (comma-separated):</label><br>
+    <input type="text" id="numbers" name="numbers" required>
+    <button type="submit">Submit</button>
+</form>
+
+<button id="show-previous">Show Previous Trees</button>
+
+<div id="result">
+    <h3>Result:</h3>
+    <pre id="result-content">No result yet.</pre>
+</div>
+
+<div id="previous-trees">
+    <h3>Previous Trees:</h3>
+    <ul id="previous-trees-list"></ul>
+</div>
+
+<script>
+    const apiBase = 'http://localhost:8080';
+
+    document.getElementById('bst-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const numbers = document.getElementById('numbers').value;
+
+        try {
+            const response = await fetch(`${apiBase}/process-numbers`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(numbers),
+            });
+
+            const data = await response.json();
+            document.getElementById('result-content').textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            console.error('Error processing numbers:', error);
+            document.getElementById('result-content').textContent = 'An error occurred.';
+        }
+    });
+
+    function renderTree(tree) {
+        if (!tree) return 'null';
+
+        return `
+            <ul>
+                <li>Root: ${tree.root}</li>
+                <li>Left: ${tree.left ? renderNode(tree.left) : 'null'}</li>
+                <li>Right: ${tree.right ? renderNode(tree.right) : 'null'}</li>
+            </ul>
+        `;
     }
 
+    function renderNode(node) {
+        return `
+            <ul>
+                <li>Value: ${node.value}</li>
+                <li>Left: ${node.left ? renderNode(node.left) : 'null'}</li>
+                <li>Right: ${node.right ? renderNode(node.right) : 'null'}</li>
+            </ul>
+        `;
+    }
+
+    document.getElementById('show-previous').addEventListener('click', async () => {
+        try {
+            const response = await fetch(`${apiBase}/previous-trees`);
+            const data = await response.json();
+
+            const list = document.getElementById('previous-trees-list');
+            list.innerHTML = ''; // Clear current content
+
+            data.forEach(tree => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <strong>Tree number: ${tree.id}</strong>
+                    ${renderTree(tree)}
+                `;
+                list.appendChild(li);
+            });
+        } catch (error) {
+            console.error('Error fetching previous trees:', error);
+            document.getElementById('previous-trees-list').textContent = 'An error occurred.';
+        }
+    });
 </script>
 </body>
 </html>

@@ -94,7 +94,7 @@
             const data = await response.json();
 
             const list = document.getElementById('previous-trees-list');
-            list.innerHTML = ''; // Clear current content
+            list.innerHTML = '';
 
             data.forEach(tree => {
                 const li = document.createElement('li');
